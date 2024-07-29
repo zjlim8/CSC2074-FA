@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">TravelLog</string>
+    <string name="title_activity_add_location">AddLocationActivity</string>
+    <string name="activity_title">Activity Title</string>
+    <string name="input_title">Enter a Title</string>
+    <string name="title_hint">Title</string>
+    <string name="country_hint">Country</string>
+    <string name="country_label">Country</string>
+    <string name="continent_label">Continent</string>
+    <string name="continent_hint">Continent</string>
+    <string name="additional_information_label">Additional Information</string>
+    <string name="additional_information_hint">Write down what was memorable for you...</string>
+    <string name="add_btn_text">Add</string>
+    <string name="visit_date_label">Visit Date</string>
+    <string name="visitDate_hint">26/12/1991</string>
+    <string name="visit_time_label">Visit Time</string>
+    <string name="visit_time_hint">00:00</string>
+    <string name="image_label">Add Image</string>
+    <string name="card_title">Visit to Saint Petersburg</string>
+    <string name="date_card_placeholder">26 Dec 1991</string>
+    <string name="datetime_separator">at</string>
+    <string name="backBtn_desc">BACK</string>
+    <string name="noRecord_text">No records yet!</string>
+    <string name="gallery_button_text">Gallery Button</string>
+    <string name="capture_image_text">Capture Image</string>
+    <string name="title_activity_capture_photo">CapturePhotoActivity</string>
+</resources>
