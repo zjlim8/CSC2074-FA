@@ -2,8 +2,8 @@
     <string name="app_name">TravelLog</string>
     <string name="title_activity_add_location">AddLocationActivity</string>
     <string name="activity_title">Activity Title</string>
-    <string name="input_title">Enter a Title</string>
-    <string name="title_hint">Title</string>
+    <string name="input_title">Enter a Location</string>
+    <string name="title_hint">Location</string>
     <string name="country_hint">Country</string>
     <string name="country_label">Country</string>
     <string name="continent_label">Continent</string>
@@ -12,7 +12,7 @@
     <string name="additional_information_hint">Write down what was memorable for you...</string>
     <string name="add_btn_text">Add</string>
     <string name="visit_date_label">Visit Date</string>
-    <string name="visitDate_hint">26/12/1991</string>
+    <string name="visitDate_hint">26 Dec 1991</string>
     <string name="visit_time_label">Visit Time</string>
     <string name="visit_time_hint">00:00</string>
     <string name="image_label">Add Image</string>

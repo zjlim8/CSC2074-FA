@@ -1,8 +1,11 @@
 package com.example.travellog
 
 import android.Manifest
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.icu.text.SimpleDateFormat
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
@@ -20,6 +23,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import java.io.File
+import java.util.Calendar
+import java.util.Locale
 
 class AddLocationActivity : ComponentActivity(), View.OnClickListener  {
 
@@ -27,6 +32,9 @@ class AddLocationActivity : ComponentActivity(), View.OnClickListener  {
     private lateinit var backBtn: ImageButton
     private lateinit var addBtn: Button
     private lateinit var photoUri: Uri
+    private lateinit var dateField: TextView
+    private lateinit var timeField: TextView
+    private val calendar = Calendar.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,10 +44,14 @@ class AddLocationActivity : ComponentActivity(), View.OnClickListener  {
         imageField = findViewById(R.id.addImagePlaceholder)
         backBtn = findViewById(R.id.backBtn)
         addBtn = findViewById(R.id.addBtn)
+        dateField = findViewById(R.id.visitDateTextField)
+        timeField = findViewById(R.id.visitTimeTextField)
 
         imageField.setOnClickListener(this)
         backBtn.setOnClickListener(this)
         addBtn.setOnClickListener(this)
+        dateField.setOnClickListener(this)
+        timeField.setOnClickListener(this)
 
     }
 
@@ -57,6 +69,12 @@ class AddLocationActivity : ComponentActivity(), View.OnClickListener  {
                     requestPermissions()
                 }
             }
+            R.id.visitDateTextField -> {
+                openDatePicker()
+            }
+            R.id.visitTimeTextField -> {
+                openTimePicker()
+            }
             R.id.addBtn -> {
                 val intent: Intent = Intent(this, MainActivity::class.java)
                 //addRecord()
@@ -64,6 +82,35 @@ class AddLocationActivity : ComponentActivity(), View.OnClickListener  {
                 finish()
             }
         }
+    }
+
+    // Function to show DatePicker
+    private fun openDatePicker() {
+        val datePickerDialog = DatePickerDialog(this, {DatePicker, year: Int, monthOfYear: Int, dayOfMonth: Int ->
+            val selectedDate = Calendar.getInstance()
+            selectedDate.set(year, monthOfYear, dayOfMonth)
+            val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+            val formattedDate = dateFormat.format(selectedDate.time)
+            dateField.text = formattedDate
+        },
+            calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)
+        )
+        datePickerDialog.show()
+    }
+
+    // Function to show TimePicker
+    private fun openTimePicker() {
+        val timePickerDialog = TimePickerDialog(this, TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
+            val selectedTime = Calendar.getInstance()
+            selectedTime.set(Calendar.HOUR_OF_DAY, hourOfDay)
+            selectedTime.set(Calendar.MINUTE, minute)
+            val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+            val formattedTime = timeFormat.format(selectedTime.time)
+            timeField.text = formattedTime
+        },
+            calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false
+        )
+        timePickerDialog.show()
     }
 
     // Function to show image picker

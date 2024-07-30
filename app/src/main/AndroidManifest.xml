@@ -26,7 +26,8 @@
             android:name=".AddLocationActivity"
             android:exported="false"
             android:label="@string/title_activity_add_location"
-            android:theme="@style/Theme.TravelLog" />
+            android:theme="@style/Theme.TravelLog"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
