@@ -26,11 +26,9 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
-import java.io.InputStream
 import java.io.OutputStream
 import java.util.Calendar
 import java.util.Locale
@@ -45,7 +43,6 @@ class AddLocationActivity : ComponentActivity(), View.OnClickListener  {
     private lateinit var dateField: TextView
     private lateinit var timeField: TextView
     private val calendar = Calendar.getInstance()
-//    private var selectedImage: ByteArray? = null
     private lateinit var imagePath: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -186,18 +183,6 @@ class AddLocationActivity : ComponentActivity(), View.OnClickListener  {
         }
         return allGranted
     }
-
-//    // Function to convert photo to ByteArray so that it can be stored in database
-//    private fun uriToByteArray(uri: Uri): ByteArray {
-//        val inputStream: InputStream? = contentResolver.openInputStream(uri)
-//        //return inputStream?.readBytes() ?: ByteArray(0)
-//        val bitmap = BitmapFactory.decodeStream(inputStream)
-//        inputStream?.close()
-//
-//        val outputStream = ByteArrayOutputStream()
-//        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
-//        return outputStream.toByteArray()
-//    }
 
     // Function to convert photo to Bitmap
     private fun uriToBitmap(uri: Uri): Bitmap {
