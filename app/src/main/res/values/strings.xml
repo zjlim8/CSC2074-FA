@@ -24,4 +24,12 @@
     <string name="gallery_button_text">Gallery Button</string>
     <string name="capture_image_text">Capture Image</string>
     <string name="title_activity_capture_photo">CapturePhotoActivity</string>
+    <string name="title_activity_detailed_view">DetailedViewActivity</string>
+    <string name="dv_deleteBtn_desc">Delete Button</string>
+    <string name="dv_editBtn_desc">Edit Button</string>
+    <string name="dv_backBtn_desc">Back</string>
+    <string name="dv_countryText">Country</string>
+    <string name="dv_continentText">Continent</string>
+    <string name="cc_separator_sym">,</string>
+    <string name="sample_additional_info">Lorem ipsum dolor sit amet consectetur</string>
 </resources>

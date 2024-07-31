@@ -10,7 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import java.io.File
 
-class AdapterClass(val context: Context, val record: ArrayList<RecordModel>): RecyclerView.Adapter<AdapterClass.ViewHolderClass>() {
+class AdapterClass(val context: Context, val record: ArrayList<RecordModel>, private val listener: OnItemClickListener): RecyclerView.Adapter<AdapterClass.ViewHolderClass>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderClass {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.recycler_view_row, parent, false)
@@ -39,6 +39,10 @@ class AdapterClass(val context: Context, val record: ArrayList<RecordModel>): Re
         holder.cardCountry.text = currentCard.country
         holder.cardDate.text = currentCard.date
         holder.cardTime.text = currentCard.time
+
+        holder.itemView.setOnClickListener {
+            listener.onItemClick(position)
+        }
     }
 
     class ViewHolderClass(itemView: View): RecyclerView.ViewHolder(itemView) {
@@ -49,5 +53,10 @@ class AdapterClass(val context: Context, val record: ArrayList<RecordModel>): Re
         val cardDate: TextView = itemView.findViewById(R.id.date_card_label)
         val cardTime: TextView = itemView.findViewById(R.id.time_card_label)
     }
+
+    interface OnItemClickListener {
+        fun onItemClick(position: Int)
+    }
+
 
 }

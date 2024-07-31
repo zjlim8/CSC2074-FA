@@ -5,6 +5,7 @@
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
+
     <uses-permission android:name="android.permission.CAMERA" />
 
     <application
@@ -17,6 +18,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TravelLog"
         tools:targetApi="31">
+        <activity
+            android:name=".DetailedViewActivity"
+            android:exported="false"
+            android:label="@string/title_activity_detailed_view"
+            android:theme="@style/Theme.TravelLog" />
         <activity
             android:name=".AddLocationActivity"
             android:exported="false"
@@ -34,6 +40,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
@@ -43,7 +50,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-
     </application>
 
 </manifest>

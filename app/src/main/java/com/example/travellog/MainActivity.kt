@@ -10,7 +10,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
-class MainActivity : ComponentActivity(), View.OnClickListener {
+class MainActivity : ComponentActivity(), View.OnClickListener, AdapterClass.OnItemClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,7 +40,7 @@ class MainActivity : ComponentActivity(), View.OnClickListener {
             // Set the LayoutManager that this RecyclerView will use.
             recyclerView.layoutManager = LinearLayoutManager(this)
             // Adapter class is initialized and list is passed in the param.
-            val adapter = AdapterClass(this, getRecordList())
+            val adapter = AdapterClass(this, getRecordList(), this)
             // adapter instance is set to the recyclerview to inflate the items.
             recyclerView.adapter = adapter
         } else {
@@ -65,6 +65,13 @@ class MainActivity : ComponentActivity(), View.OnClickListener {
         val databaseHandler = DatabaseHandler(this)
         // Calling function in DatabaseHandler class to read data
         return databaseHandler.viewRecord()
+    }
+
+    override fun onItemClick(position: Int) {
+        val clickedItem = getRecordList()[position]
+        val intent: Intent = Intent(this, DetailedViewActivity::class.java)
+        //intent.putExtra("record", clickedItem)
+        startActivity(intent)
     }
 
 

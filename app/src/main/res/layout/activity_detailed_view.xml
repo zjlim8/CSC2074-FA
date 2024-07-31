@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="50dp">
+
+        <ImageButton
+            android:id="@+id/dv_backBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/dv_backBtn_desc"
+            android:src="@drawable/backbtnimg"
+            android:background="@null"
+            android:layout_marginStart="30dp"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center"/>
+
+        <ImageButton
+            android:id="@+id/dv_editBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:contentDescription="@string/dv_editBtn_desc"
+            android:src="@drawable/editicon"
+            android:layout_gravity="center"
+            android:layout_marginEnd="30dp"/>
+
+        <ImageButton
+            android:id="@+id/dv_deleteBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:contentDescription="@string/dv_deleteBtn_desc"
+            android:src="@drawable/deleteicon"
+            android:layout_gravity="center"
+            android:layout_marginEnd="30dp"/>
+
+    </LinearLayout>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="10dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp">
+        <ImageView
+            android:id="@+id/recordImg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/addimageplaceholder"
+            android:scaleType="center"/>
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/recordTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/title_hint"
+        android:textSize="22sp"
+        android:textColor="#618264"
+        android:textStyle="bold"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp">
+
+        <TextView
+            android:id="@+id/countryText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/dv_countryText"
+            android:textColor="#BFBFBF"
+            android:textSize="11sp"/>
+
+        <TextView
+            android:id="@+id/cc_separator"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/cc_separator_sym"
+            android:textColor="#BFBFBF"
+            android:textSize="11sp"/>
+
+        <TextView
+            android:id="@+id/continentText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/dv_continentText"
+            android:textColor="#BFBFBF"
+            android:textSize="11sp"
+            android:layout_marginStart="3dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginStart="30dp">
+
+        <TextView
+            android:id="@+id/recordDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/date_card_placeholder"
+            android:textColor="#BFBFBF"
+            android:textSize="11sp"/>
+
+        <TextView
+            android:id="@+id/dv_dt_separator"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/datetime_separator"
+            android:textColor="#BFBFBF"
+            android:textSize="11sp"
+            android:layout_marginStart="3dp"/>
+
+        <TextView
+            android:id="@+id/recordTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/visit_time_hint"
+            android:textColor="#BFBFBF"
+            android:textSize="11sp"
+            android:layout_marginStart="3dp"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/recordAdditionalInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/sample_additional_info"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:textColor="#000000"
+        android:textSize="16sp"/>
+
+
+</LinearLayout>
