@@ -16,7 +16,6 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
 
         // Attributes of the record
         private const val PRIMARY_KEY = "_id"
-//        private const val CARD_IMAGE = "image"
         private const val CARD_TITLE = "title"
         private const val CARD_CONTINENT = "continent"
         private const val CARD_COUNTRY = "country"
