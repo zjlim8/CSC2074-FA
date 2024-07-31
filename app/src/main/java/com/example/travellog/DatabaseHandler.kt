@@ -28,8 +28,8 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
 
     override fun onCreate(db: SQLiteDatabase?) {
         val createTable =
-            ("CREATE TABLE " + TABLE_NAME + "(" + PRIMARY_KEY + " INTEGER PRIMARY KEY,"
-                    + CARD_IMAGE + " TEXT,"
+            ("CREATE TABLE " + TABLE_NAME + "(" + PRIMARY_KEY + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                    + CARD_IMAGE + " BLOB,"
                     + CARD_TITLE + " TEXT,"
                     + CARD_CONTINENT + " TEXT,"
                     + CARD_COUNTRY + " TEXT,"
@@ -84,7 +84,7 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         }
 
         var id: Int
-        var image: Int
+        var image: ByteArray
         var title: String
         var continent: String
         var country: String
@@ -95,7 +95,7 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         if(cursor.moveToFirst()) {
             do {
                 id = cursor.getInt(cursor.getColumnIndex(PRIMARY_KEY))
-                image = cursor.getInt(cursor.getColumnIndex(CARD_IMAGE))
+                image = cursor.getBlob(cursor.getColumnIndex(CARD_IMAGE))
                 title = cursor.getString(cursor.getColumnIndex(CARD_TITLE))
                 continent = cursor.getString(cursor.getColumnIndex(CARD_CONTINENT))
                 country = cursor.getString(cursor.getColumnIndex(CARD_COUNTRY))

@@ -5,6 +5,8 @@ import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.icu.text.SimpleDateFormat
 import android.net.Uri
 import android.os.Bundle
@@ -22,7 +24,9 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import java.io.ByteArrayOutputStream
 import java.io.File
+import java.io.InputStream
 import java.util.Calendar
 import java.util.Locale
 
@@ -35,6 +39,7 @@ class AddLocationActivity : ComponentActivity(), View.OnClickListener  {
     private lateinit var dateField: TextView
     private lateinit var timeField: TextView
     private val calendar = Calendar.getInstance()
+    private var selectedImage: ByteArray? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,7 +82,7 @@ class AddLocationActivity : ComponentActivity(), View.OnClickListener  {
             }
             R.id.addBtn -> {
                 val intent: Intent = Intent(this, MainActivity::class.java)
-                //addRecord()
+                addRecord()
                 startActivity(intent)
                 finish()
             }
@@ -133,6 +138,7 @@ class AddLocationActivity : ComponentActivity(), View.OnClickListener  {
             Toast.makeText(this, "Photo captured successfully", Toast.LENGTH_SHORT).show()
             // Set the image URI to imageField
             imageField.setImageURI(photoUri)
+            selectedImage = uriToByteArray(photoUri)
         }
     }
 
@@ -141,6 +147,7 @@ class AddLocationActivity : ComponentActivity(), View.OnClickListener  {
             Toast.makeText(this, "Image selected from gallery", Toast.LENGTH_SHORT).show()
             // Set the image URI to the ImageView
             imageField.setImageURI(it)
+            selectedImage = uriToByteArray(it)
         }
     }
 
@@ -171,40 +178,20 @@ class AddLocationActivity : ComponentActivity(), View.OnClickListener  {
         return allGranted
     }
 
-    private fun showPermissionRationaleDialog() {
-        AlertDialog.Builder(this)
-            .setTitle("Permissions Required")
-            .setMessage("Camera permissions are required to take photos. Please grant the permissions.")
-            .setPositiveButton("OK") { dialog, _ ->
-                requestPermissions()
-                dialog.dismiss()
-            }
-            .setNegativeButton("Cancel") { dialog, _ ->
-                dialog.dismiss()
-            }
-            .create()
-            .show()
+    // Function to convert photo to ByteArray so that it can be stored in database
+    private fun uriToByteArray(uri: Uri): ByteArray {
+        val inputStream: InputStream? = contentResolver.openInputStream(uri)
+        //return inputStream?.readBytes() ?: ByteArray(0)
+        val bitmap = BitmapFactory.decodeStream(inputStream)
+        inputStream?.close()
+
+        val outputStream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+        return outputStream.toByteArray()
     }
 
-//    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-//        if (requestCode == REQUEST_CODE_PERMISSIONS) {
-//            if(hasPermissions()) {
-//                showImagePicker()
-//            } else {
-//                Toast.makeText(this, "Permission not granted.", Toast.LENGTH_SHORT).show()
-//                if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
-//                    showPermissionRationaleDialog()
-//                } else {
-//                    Toast.makeText(this, "Permissions were denied permanently.", Toast.LENGTH_LONG).show()
-//                }
-//            }
-//        }
-//    }
-
     // Function to add records into the database
-    private fun addRecord(view: View) {
-        //val imageField: ImageView = findViewById(R.id.addImagePlaceholder)
+    private fun addRecord() {
         val titleField: TextView = findViewById(R.id.titleTextField)
         val continentField: TextView = findViewById(R.id.continentTextField)
         val countryField: TextView = findViewById(R.id.countryTextField)
@@ -214,7 +201,6 @@ class AddLocationActivity : ComponentActivity(), View.OnClickListener  {
         val databaseHandler = DatabaseHandler(this)
 
         // Converting user input to String
-        // imageField conversion here
         val recordTitle = titleField.text.toString()
         val recordContinent = continentField.text.toString()
         val recordCountry = countryField.text.toString()
@@ -223,8 +209,8 @@ class AddLocationActivity : ComponentActivity(), View.OnClickListener  {
         val recordAdditionalInfo = additionalInfoField.text.toString()
 
         // Checks if all fields are empty except for additionalInfo
-        if(/* image missing */recordTitle.isNotEmpty() && recordContinent.isNotEmpty() && recordCountry.isNotEmpty() && recordDate.isNotEmpty() && recordTime.isNotEmpty()) {
-            val status = databaseHandler.addRecord(RecordModel(0, 0, recordTitle, recordContinent, recordCountry, recordDate, recordTime, recordAdditionalInfo))
+        if(selectedImage != null && recordTitle.isNotEmpty() && recordContinent.isNotEmpty() && recordCountry.isNotEmpty() && recordDate.isNotEmpty() && recordTime.isNotEmpty()) {
+            val status = databaseHandler.addRecord(RecordModel(0, selectedImage!!, recordTitle, recordContinent, recordCountry, recordDate, recordTime, recordAdditionalInfo))
             if(status > -1) {
                 Toast.makeText(applicationContext, "Record Saved!", Toast.LENGTH_SHORT).show()
             }

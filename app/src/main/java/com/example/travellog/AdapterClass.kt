@@ -1,6 +1,7 @@
 package com.example.travellog
 
 import android.content.Context
+import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,7 +23,8 @@ class AdapterClass(val context: Context, val record: ArrayList<RecordModel>): Re
     override fun onBindViewHolder(holder: ViewHolderClass, position: Int) {
 
         val currentCard = record[position]
-        holder.cardImage.setImageResource(currentCard.image)
+        val bitmap = BitmapFactory.decodeByteArray(currentCard.image, 0, currentCard.image.size)
+        holder.cardImage.setImageBitmap(bitmap)
         holder.cardTitle.text = currentCard.title
         holder.cardContinent.text = currentCard.continent
         holder.cardCountry.text = currentCard.country
