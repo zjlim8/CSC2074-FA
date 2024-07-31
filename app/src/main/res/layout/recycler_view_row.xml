@@ -34,9 +34,8 @@
 
                 <TextView
                     android:id="@+id/continent_card_label"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.4"
                     android:text="@string/continent_label"
                     android:textSize="12sp"
                     android:textColor="#618264"
@@ -52,13 +51,13 @@
                     android:textSize="11sp"
                     android:textColor="#BFBFBF"
                     android:layout_marginTop="10dp"
-                    android:layout_marginBottom="5dp"/>
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginStart="5dp"/>
 
                 <TextView
                     android:id="@+id/date_card_label"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.55"
                     android:text="@string/date_card_placeholder"
                     android:textSize="11sp"
                     android:textColor="#BFBFBF"
@@ -80,9 +79,8 @@
 
                 <TextView
                     android:id="@+id/time_card_label"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.3"
                     android:text="@string/visit_time_hint"
                     android:textSize="11sp"
                     android:textColor="#BFBFBF"

@@ -3,6 +3,8 @@ package com.example.travellog
 import android.Manifest
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.Context
+import android.content.ContextWrapper
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -26,9 +28,13 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import java.io.ByteArrayOutputStream
 import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
 import java.io.InputStream
+import java.io.OutputStream
 import java.util.Calendar
 import java.util.Locale
+import java.util.UUID
 
 class AddLocationActivity : ComponentActivity(), View.OnClickListener  {
 
@@ -39,7 +45,8 @@ class AddLocationActivity : ComponentActivity(), View.OnClickListener  {
     private lateinit var dateField: TextView
     private lateinit var timeField: TextView
     private val calendar = Calendar.getInstance()
-    private var selectedImage: ByteArray? = null
+//    private var selectedImage: ByteArray? = null
+    private lateinit var imagePath: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -137,8 +144,9 @@ class AddLocationActivity : ComponentActivity(), View.OnClickListener  {
         if(success) {
             Toast.makeText(this, "Photo captured successfully", Toast.LENGTH_SHORT).show()
             // Set the image URI to imageField
+            val bitmap = uriToBitmap(photoUri)
             imageField.setImageURI(photoUri)
-            selectedImage = uriToByteArray(photoUri)
+            imagePath = saveImageToInternalStorage(bitmap)
         }
     }
 
@@ -146,8 +154,9 @@ class AddLocationActivity : ComponentActivity(), View.OnClickListener  {
         uri?.let {
             Toast.makeText(this, "Image selected from gallery", Toast.LENGTH_SHORT).show()
             // Set the image URI to the ImageView
+            val bitmap = uriToBitmap(it)
             imageField.setImageURI(it)
-            selectedImage = uriToByteArray(it)
+            imagePath = saveImageToInternalStorage(bitmap)
         }
     }
 
@@ -178,16 +187,47 @@ class AddLocationActivity : ComponentActivity(), View.OnClickListener  {
         return allGranted
     }
 
-    // Function to convert photo to ByteArray so that it can be stored in database
-    private fun uriToByteArray(uri: Uri): ByteArray {
-        val inputStream: InputStream? = contentResolver.openInputStream(uri)
-        //return inputStream?.readBytes() ?: ByteArray(0)
-        val bitmap = BitmapFactory.decodeStream(inputStream)
-        inputStream?.close()
+//    // Function to convert photo to ByteArray so that it can be stored in database
+//    private fun uriToByteArray(uri: Uri): ByteArray {
+//        val inputStream: InputStream? = contentResolver.openInputStream(uri)
+//        //return inputStream?.readBytes() ?: ByteArray(0)
+//        val bitmap = BitmapFactory.decodeStream(inputStream)
+//        inputStream?.close()
+//
+//        val outputStream = ByteArrayOutputStream()
+//        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+//        return outputStream.toByteArray()
+//    }
 
-        val outputStream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
-        return outputStream.toByteArray()
+    // Function to convert photo to Bitmap
+    private fun uriToBitmap(uri: Uri): Bitmap {
+        return when {
+            uri.scheme.equals("content") -> {
+                val inputStream = contentResolver.openInputStream(uri)
+                BitmapFactory.decodeStream(inputStream)
+            }
+            else -> {
+                BitmapFactory.decodeFile(uri.path)
+            }
+        }
+    }
+
+    // Function to save file to storage so file size is not limited
+    private fun saveImageToInternalStorage(bitmap: Bitmap): String {
+        val wrapper = ContextWrapper(applicationContext)
+        var file = wrapper.getDir("images", Context.MODE_PRIVATE)
+        file = File(file, "${UUID.randomUUID()}.jpg")
+
+        try {
+            val stream: OutputStream = FileOutputStream(file)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+            stream.flush()
+            stream.close()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+
+        return file.absolutePath
     }
 
     // Function to add records into the database
@@ -209,8 +249,8 @@ class AddLocationActivity : ComponentActivity(), View.OnClickListener  {
         val recordAdditionalInfo = additionalInfoField.text.toString()
 
         // Checks if all fields are empty except for additionalInfo
-        if(selectedImage != null && recordTitle.isNotEmpty() && recordContinent.isNotEmpty() && recordCountry.isNotEmpty() && recordDate.isNotEmpty() && recordTime.isNotEmpty()) {
-            val status = databaseHandler.addRecord(RecordModel(0, selectedImage!!, recordTitle, recordContinent, recordCountry, recordDate, recordTime, recordAdditionalInfo))
+        if(::imagePath.isInitialized && recordTitle.isNotEmpty() && recordContinent.isNotEmpty() && recordCountry.isNotEmpty() && recordDate.isNotEmpty() && recordTime.isNotEmpty()) {
+            val status = databaseHandler.addRecord(RecordModel(0, imagePath, recordTitle, recordContinent, recordCountry, recordDate, recordTime, recordAdditionalInfo))
             if(status > -1) {
                 Toast.makeText(applicationContext, "Record Saved!", Toast.LENGTH_SHORT).show()
             }

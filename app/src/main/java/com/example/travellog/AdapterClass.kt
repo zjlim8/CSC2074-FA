@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import java.io.File
 
 class AdapterClass(val context: Context, val record: ArrayList<RecordModel>): RecyclerView.Adapter<AdapterClass.ViewHolderClass>() {
 
@@ -23,8 +24,19 @@ class AdapterClass(val context: Context, val record: ArrayList<RecordModel>): Re
     override fun onBindViewHolder(holder: ViewHolderClass, position: Int) {
 
         val currentCard = record[position]
-        val bitmap = BitmapFactory.decodeByteArray(currentCard.image, 0, currentCard.image.size)
-        holder.cardImage.setImageBitmap(bitmap)
+//        val bitmap = BitmapFactory.decodeByteArray(currentCard.image, 0, currentCard.image.size)
+//        holder.cardImage.setImageBitmap(bitmap)
+
+        // Load image from file path
+        val imageFile = File(currentCard.imgPath)
+        if (imageFile.exists()) {
+            val bitmap = BitmapFactory.decodeFile(imageFile.absolutePath)
+            holder.cardImage.setImageBitmap(bitmap)
+        } else {
+            // Set a placeholder image if the file doesn't exist
+            //holder.cardImage.setImageResource(R.drawable.placeholder_image)
+        }
+
         holder.cardTitle.text = currentCard.title
         holder.cardContinent.text = currentCard.continent
         holder.cardCountry.text = currentCard.country

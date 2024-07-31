@@ -6,7 +6,6 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
 import android.database.sqlite.SQLiteOpenHelper
-import androidx.compose.ui.viewinterop.InteropView
 
 class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION) {
 
@@ -17,19 +16,20 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
 
         // Attributes of the record
         private const val PRIMARY_KEY = "_id"
-        private const val CARD_IMAGE = "image"
+//        private const val CARD_IMAGE = "image"
         private const val CARD_TITLE = "title"
         private const val CARD_CONTINENT = "continent"
         private const val CARD_COUNTRY = "country"
         private const val CARD_DATE = "date"
         private const val CARD_TIME = "time"
         private const val ADDITIONAL_INFO = "additionalInfo"
+        private const val CARD_IMAGE_PATH = "imgPath"
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
         val createTable =
             ("CREATE TABLE " + TABLE_NAME + "(" + PRIMARY_KEY + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                    + CARD_IMAGE + " BLOB,"
+                    + CARD_IMAGE_PATH + " TEXT,"
                     + CARD_TITLE + " TEXT,"
                     + CARD_CONTINENT + " TEXT,"
                     + CARD_COUNTRY + " TEXT,"
@@ -51,7 +51,7 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         val db = this.writableDatabase
 
         val content = ContentValues()
-        content.put(CARD_IMAGE, record.image)
+        content.put(CARD_IMAGE_PATH, record.imgPath)
         content.put(CARD_TITLE, record.title)
         content.put(CARD_CONTINENT, record.continent)
         content.put(CARD_COUNTRY, record.country)
@@ -61,7 +61,6 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
 
         // Insertion into database
         val insertion = db.insert(TABLE_NAME, null, content)
-
         db.close()
         return insertion
     }
@@ -84,7 +83,7 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         }
 
         var id: Int
-        var image: ByteArray
+        var imgPath: String
         var title: String
         var continent: String
         var country: String
@@ -95,7 +94,7 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         if(cursor.moveToFirst()) {
             do {
                 id = cursor.getInt(cursor.getColumnIndex(PRIMARY_KEY))
-                image = cursor.getBlob(cursor.getColumnIndex(CARD_IMAGE))
+                imgPath = cursor.getString(cursor.getColumnIndex(CARD_IMAGE_PATH))
                 title = cursor.getString(cursor.getColumnIndex(CARD_TITLE))
                 continent = cursor.getString(cursor.getColumnIndex(CARD_CONTINENT))
                 country = cursor.getString(cursor.getColumnIndex(CARD_COUNTRY))
@@ -103,7 +102,7 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
                 time = cursor.getString(cursor.getColumnIndex(CARD_TIME))
                 additionalInfo = cursor.getString(cursor.getColumnIndex(ADDITIONAL_INFO))
 
-                val record = RecordModel(id = id, image = image, title = title, continent = continent, country = country, date = date, time = time, additionalInfo = additionalInfo)
+                val record = RecordModel(id = id, imgPath = imgPath, title = title, continent = continent, country = country, date = date, time = time, additionalInfo = additionalInfo)
                 recordList.add(record)
             } while(cursor.moveToNext())
         }
@@ -114,7 +113,7 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
     fun updateRecord(record: RecordModel): Int {
         val db = this.writableDatabase
         val content = ContentValues()
-        content.put(CARD_IMAGE, record.image)
+        content.put(CARD_IMAGE_PATH, record.imgPath)
         content.put(CARD_TITLE, record.title)
         content.put(CARD_CONTINENT, record.continent)
         content.put(CARD_COUNTRY, record.country)
