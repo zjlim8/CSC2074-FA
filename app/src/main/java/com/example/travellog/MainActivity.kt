@@ -40,7 +40,7 @@ class MainActivity : ComponentActivity(), View.OnClickListener, AdapterClass.OnI
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                TODO("Not yet implemented")
+                // Nothing is done
             }
         }
 
