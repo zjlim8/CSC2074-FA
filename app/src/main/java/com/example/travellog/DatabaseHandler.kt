@@ -12,7 +12,7 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
     companion object {
         private const val DB_VERSION = 1
         private const val DB_NAME = "RecordDatabase"
-        private const val TABLE_NAME = "RecordTable"
+        const val TABLE_NAME = "RecordTable"
 
         // Attributes of the record
         private const val PRIMARY_KEY = "_id"
@@ -65,10 +65,10 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
     }
 
     // Function to read data
-    fun viewRecord(): ArrayList<RecordModel> {
+    fun viewRecord(sqlQuery: String): ArrayList<RecordModel> {
         val recordList: ArrayList<RecordModel> = ArrayList<RecordModel>()
 
-        val sqlQuery = "SELECT * FROM $TABLE_NAME"
+//        val sqlQuery = "SELECT * FROM $TABLE_NAME ORDER BY _id DESC"
 
         val db = this.readableDatabase
         var cursor: Cursor?

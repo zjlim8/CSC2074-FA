@@ -32,4 +32,5 @@
     <string name="dv_continentText">Continent</string>
     <string name="cc_separator_sym">,</string>
     <string name="sample_additional_info">Lorem ipsum dolor sit amet consectetur</string>
+    <string name="record_list_title">Your Trips</string>
 </resources>
