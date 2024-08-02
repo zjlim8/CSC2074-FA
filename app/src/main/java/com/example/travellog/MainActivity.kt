@@ -40,7 +40,7 @@ class MainActivity : ComponentActivity(), View.OnClickListener, AdapterClass.OnI
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                // Nothing is done
+                // Code for when nothing is selected
             }
         }
 
