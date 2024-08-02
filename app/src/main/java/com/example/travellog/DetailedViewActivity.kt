@@ -1,6 +1,7 @@
 package com.example.travellog
 
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageButton
@@ -18,19 +19,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.travellog.ui.theme.TravelLogTheme
 import org.w3c.dom.Text
+import java.io.File
 
 class DetailedViewActivity : ComponentActivity(), View.OnClickListener   {
 
     private lateinit var backBtn: ImageButton
     private lateinit var editBtn: ImageButton
     private lateinit var deleteBtn: ImageButton
-    private lateinit var recordImage: ImageView
-    private lateinit var recordTitle: TextView
-    private lateinit var recordContinent: TextView
-    private lateinit var recordCountry: TextView
-    private lateinit var recordDate: TextView
-    private lateinit var recordTime: TextView
-    private lateinit var recordAdditionalInfo: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +38,34 @@ class DetailedViewActivity : ComponentActivity(), View.OnClickListener   {
 
         backBtn.setOnClickListener(this)
         editBtn.setOnClickListener(this)
+
+        val record: RecordModel? = intent.getSerializableExtra("record") as? RecordModel
+
+
+
+        if(record != null) {
+            val recordImage: ImageView = findViewById(R.id.recordImg)
+            val recordTitle: TextView = findViewById(R.id.recordTitle)
+            val recordContinent: TextView = findViewById(R.id.recordCountry)
+            val recordCountry: TextView = findViewById(R.id.recordContinent)
+            val recordDate: TextView = findViewById(R.id.recordDate)
+            val recordTime: TextView = findViewById(R.id.recordTime)
+            val recordAdditionalInfo: TextView = findViewById(R.id.recordAdditionalInfo)
+
+            val imageFile = File(record!!.imgPath)
+            if (imageFile.exists()) {
+                val bitmap = BitmapFactory.decodeFile(imageFile.absolutePath)
+                recordImage.setImageBitmap(bitmap)
+            } else {
+                recordImage.setImageResource(R.drawable.addimageplaceholder)
+            }
+            recordTitle.text = record.title
+            recordContinent.text = record.continent
+            recordCountry.text = record.country
+            recordDate.text = record.date
+            recordTime.text = record.time
+            recordAdditionalInfo.text = record.additionalInfo
+        }
 
     }
 

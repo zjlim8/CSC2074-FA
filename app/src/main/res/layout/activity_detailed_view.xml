@@ -59,9 +59,9 @@
         <ImageView
             android:id="@+id/recordImg"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="240dp"
             android:src="@drawable/addimageplaceholder"
-            android:scaleType="center"/>
+            android:scaleType="centerCrop"/>
     </androidx.cardview.widget.CardView>
 
     <TextView
@@ -85,7 +85,7 @@
         android:layout_marginBottom="5dp">
 
         <TextView
-            android:id="@+id/countryText"
+            android:id="@+id/recordCountry"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/dv_countryText"
@@ -101,7 +101,7 @@
             android:textSize="11sp"/>
 
         <TextView
-            android:id="@+id/continentText"
+            android:id="@+id/recordContinent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/dv_continentText"

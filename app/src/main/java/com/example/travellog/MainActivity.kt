@@ -70,7 +70,7 @@ class MainActivity : ComponentActivity(), View.OnClickListener, AdapterClass.OnI
     override fun onItemClick(position: Int) {
         val clickedItem = getRecordList()[position]
         val intent: Intent = Intent(this, DetailedViewActivity::class.java)
-        //intent.putExtra("record", clickedItem)
+        intent.putExtra("record", clickedItem)
         startActivity(intent)
     }
 
