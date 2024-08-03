@@ -27,7 +27,8 @@
             android:name=".EditRecordActivity"
             android:exported="false"
             android:label="@string/title_activity_edit_record"
-            android:theme="@style/Theme.TravelLog" />
+            android:theme="@style/Theme.TravelLog"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".DetailedViewActivity"
             android:exported="false"

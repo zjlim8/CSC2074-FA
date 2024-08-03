@@ -132,6 +132,7 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
     // Function to update data
     fun updateRecord(record: RecordModel): Int {
         val db = this.writableDatabase
+
         val content = ContentValues()
         content.put(CARD_IMAGE_PATH, record.imgPath)
         content.put(CARD_TITLE, record.title)
@@ -142,7 +143,6 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         content.put(ADDITIONAL_INFO, record.additionalInfo)
 
         val update = db.update(TABLE_NAME, content, PRIMARY_KEY + "=" + record.id, null)
-
         db.close()
         return update
     }
@@ -155,7 +155,6 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
 
         // Delete Row
         val delete = db.delete(TABLE_NAME, PRIMARY_KEY + "=" + record.id, null)
-
         db.close()
         return delete
     }
