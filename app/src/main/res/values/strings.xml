@@ -33,4 +33,8 @@
     <string name="cc_separator_sym">,</string>
     <string name="sample_additional_info">Lorem ipsum dolor sit amet consectetur</string>
     <string name="record_list_title">Your Trips</string>
+    <string name="title_activity_edit_record">EditRecordActivity</string>
+    <string name="editRecord_activity_title">Edit Record</string>
+    <string name="editRecord_doneBtn_text">Done</string>
+    <string name="title_activity_user_input">UserInputActivity</string>
 </resources>

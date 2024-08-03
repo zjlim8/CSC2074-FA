@@ -26,6 +26,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import com.example.travellog.AddLocationActivity.Companion.REQUEST_CODE_PERMISSIONS
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -34,60 +35,107 @@ import java.util.Calendar
 import java.util.Locale
 import java.util.UUID
 
-class AddLocationActivity : ComponentActivity(), View.OnClickListener  {
+class EditRecordActivity : ComponentActivity(), View.OnClickListener {
 
-    private lateinit var imageField: ImageView
-    private lateinit var backBtn: ImageButton
-    private lateinit var addBtn: Button
-    private lateinit var photoUri: Uri
-    private lateinit var dateField: TextView
-    private lateinit var timeField: TextView
+    private lateinit var record: RecordModel
+    private lateinit var recordImage: ImageView
+    private lateinit var recordTitle: TextView
+    private lateinit var recordContinent: TextView
+    private lateinit var recordCountry: TextView
+    private lateinit var recordDate: TextView
+    private lateinit var recordTime: TextView
+    private lateinit var recordAdditionalInfo: TextView
     private val calendar = Calendar.getInstance()
     private lateinit var imagePath: String
+    private lateinit var photoUri: Uri
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_add_location)
+        setContentView(R.layout.activity_edit_record)
 
-        imageField = findViewById(R.id.addImagePlaceholder)
-        backBtn = findViewById(R.id.backBtn)
-        addBtn = findViewById(R.id.addBtn)
-        dateField = findViewById(R.id.visitDateTextField)
-        timeField = findViewById(R.id.visitTimeTextField)
+        // Initialising the elements in the activity
+        recordImage = findViewById(R.id.er_addImagePlaceholder)
+        recordTitle = findViewById(R.id.er_titleTextField)
+        recordContinent = findViewById(R.id.er_countryTextField)
+        recordCountry = findViewById(R.id.er_continentTextField)
+        recordDate = findViewById(R.id.er_visitDateTextField)
+        recordTime = findViewById(R.id.er_visitTimeTextField)
+        recordAdditionalInfo = findViewById(R.id.er_additionalInformationTextField)
 
-        imageField.setOnClickListener(this)
+        // Retrieving record from data sent over by previous activity
+        record = (intent.getSerializableExtra("record") as? RecordModel)!!
+
+        // Setting onClickListener for buttons
+        val backBtn: ImageButton = findViewById(R.id.er_backBtn)
+        val doneBtn: Button = findViewById(R.id.er_doneBtn)
+
         backBtn.setOnClickListener(this)
-        addBtn.setOnClickListener(this)
-        dateField.setOnClickListener(this)
-        timeField.setOnClickListener(this)
+        doneBtn.setOnClickListener(this)
+        recordImage.setOnClickListener(this)
+        recordDate.setOnClickListener(this)
+        recordTime.setOnClickListener(this)
+
+        val imageFile = File(record.imgPath)
+        if (imageFile.exists()) {
+            val bitmap = BitmapFactory.decodeFile(imageFile.absolutePath)
+            recordImage.setImageBitmap(bitmap)
+        } else {
+            recordImage.setImageResource(R.drawable.addimageplaceholder)
+        }
+        recordTitle.text = record.title
+        recordContinent.text = record.continent
+        recordCountry.text = record.country
+        recordDate.text = record.date
+        recordTime.text = record.time
+        recordAdditionalInfo.text = record.additionalInfo
 
     }
 
     override fun onClick(v: View?) {
         when(v?.id) {
-            R.id.backBtn -> {
-                val intent: Intent = Intent(this, MainActivity::class.java)
+            R.id.er_backBtn -> {
+                val intent: Intent = Intent(this, DetailedViewActivity::class.java)
+                intent.putExtra("record", record)
                 startActivity(intent)
-                finish()
             }
-            R.id.addImagePlaceholder -> {
+            R.id.er_doneBtn -> {
+                updateRecord()
+                val intent: Intent = Intent(this, DetailedViewActivity::class.java)
+                intent.putExtra("record", record)
+                startActivity(intent)
+            }
+            R.id.er_visitDateTextField -> {
+                openDatePicker()
+            }
+            R.id.er_visitTimeTextField -> {
+                openTimePicker()
+            }
+            R.id.er_addImagePlaceholder -> {
                 if(hasPermissions()) {
                     showImagePicker()
                 } else {
                     requestPermissions()
                 }
             }
-            R.id.visitDateTextField -> {
-                openDatePicker()
-            }
-            R.id.visitTimeTextField -> {
-                openTimePicker()
-            }
-            R.id.addBtn -> {
-                addRecord()
-            }
+
         }
+    }
+
+    // Function to update the selected record
+    private fun updateRecord() {
+
+        record.title = recordTitle.text.toString()
+        record.continent = recordContinent.text.toString()
+        record.country = recordCountry.text.toString()
+        record.date = recordDate.text.toString()
+        record.time = recordTime.text.toString()
+        record.additionalInfo = recordAdditionalInfo.text.toString()
+
+
+        val databaseHandler = DatabaseHandler(this)
+        databaseHandler.updateRecord(record)
+
     }
 
     // Function to show DatePicker
@@ -97,7 +145,7 @@ class AddLocationActivity : ComponentActivity(), View.OnClickListener  {
             selectedDate.set(year, monthOfYear, dayOfMonth)
             val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
             val formattedDate = dateFormat.format(selectedDate.time)
-            dateField.text = formattedDate
+            recordDate.text = formattedDate
         },
             calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)
         )
@@ -117,7 +165,7 @@ class AddLocationActivity : ComponentActivity(), View.OnClickListener  {
             } else {
                 val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
                 val formattedTime = timeFormat.format(selectedTime.time)
-                timeField.text = formattedTime
+                recordTime.text = formattedTime
             }
         },
             calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false
@@ -145,7 +193,7 @@ class AddLocationActivity : ComponentActivity(), View.OnClickListener  {
             Toast.makeText(this, "Photo captured successfully", Toast.LENGTH_SHORT).show()
             // Set the image URI to imageField
             val bitmap = uriToBitmap(photoUri)
-            imageField.setImageURI(photoUri)
+            recordImage.setImageURI(photoUri)
             imagePath = saveImageToInternalStorage(bitmap)
         }
     }
@@ -155,7 +203,7 @@ class AddLocationActivity : ComponentActivity(), View.OnClickListener  {
             Toast.makeText(this, "Image selected from gallery", Toast.LENGTH_SHORT).show()
             // Set the image URI to the ImageView
             val bitmap = uriToBitmap(it)
-            imageField.setImageURI(it)
+            recordImage.setImageURI(it)
             imagePath = saveImageToInternalStorage(bitmap)
         }
     }
@@ -218,42 +266,4 @@ class AddLocationActivity : ComponentActivity(), View.OnClickListener  {
         return file.absolutePath
     }
 
-    // Function to add records into the database
-    private fun addRecord() {
-        val titleField: TextView = findViewById(R.id.titleTextField)
-        val continentField: TextView = findViewById(R.id.continentTextField)
-        val countryField: TextView = findViewById(R.id.countryTextField)
-        val dateField: TextView = findViewById(R.id.visitDateTextField)
-        val timeField: TextView = findViewById(R.id.visitTimeTextField)
-        val additionalInfoField: TextView = findViewById(R.id.additionalInformationTextField)
-        val databaseHandler = DatabaseHandler(this)
-
-        // Converting user input to String
-        val recordTitle = titleField.text.toString()
-        val recordContinent = continentField.text.toString()
-        val recordCountry = countryField.text.toString()
-        val recordDate = dateField.text.toString()
-        val recordTime = timeField.text.toString()
-        val recordAdditionalInfo = additionalInfoField.text.toString()
-
-        // Checks if all fields are empty except for additionalInfo
-        if(::imagePath.isInitialized && recordTitle.isNotEmpty() && recordContinent.isNotEmpty() && recordCountry.isNotEmpty() && recordDate.isNotEmpty() && recordTime.isNotEmpty()) {
-            val status = databaseHandler.addRecord(RecordModel(0, imagePath, recordTitle, recordContinent, recordCountry, recordDate, recordTime, recordAdditionalInfo))
-            if(status > -1) {
-                Toast.makeText(applicationContext, "Record Saved!", Toast.LENGTH_SHORT).show()
-                val intent: Intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
-                finish()
-            }
-        } else {
-            Toast.makeText(applicationContext, "Required fields are not filled!", Toast.LENGTH_SHORT).show()
-        }
-
-    }
-
-    companion object {
-        const val REQUEST_CODE_PERMISSIONS = 10
-    }
-
 }
-

@@ -19,6 +19,16 @@
         android:theme="@style/Theme.TravelLog"
         tools:targetApi="31">
         <activity
+            android:name=".UserInputActivity"
+            android:exported="false"
+            android:label="@string/title_activity_user_input"
+            android:theme="@style/Theme.TravelLog" />
+        <activity
+            android:name=".EditRecordActivity"
+            android:exported="false"
+            android:label="@string/title_activity_edit_record"
+            android:theme="@style/Theme.TravelLog" />
+        <activity
             android:name=".DetailedViewActivity"
             android:exported="false"
             android:label="@string/title_activity_detailed_view"

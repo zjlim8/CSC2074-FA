@@ -68,8 +68,6 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
     fun viewRecord(sqlQuery: String): ArrayList<RecordModel> {
         val recordList: ArrayList<RecordModel> = ArrayList<RecordModel>()
 
-//        val sqlQuery = "SELECT * FROM $TABLE_NAME ORDER BY _id DESC"
-
         val db = this.readableDatabase
         var cursor: Cursor?
 
@@ -92,17 +90,40 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
 
         if(cursor.moveToFirst()) {
             do {
-                id = cursor.getInt(cursor.getColumnIndex(PRIMARY_KEY))
-                imgPath = cursor.getString(cursor.getColumnIndex(CARD_IMAGE_PATH))
-                title = cursor.getString(cursor.getColumnIndex(CARD_TITLE))
-                continent = cursor.getString(cursor.getColumnIndex(CARD_CONTINENT))
-                country = cursor.getString(cursor.getColumnIndex(CARD_COUNTRY))
-                date = cursor.getString(cursor.getColumnIndex(CARD_DATE))
-                time = cursor.getString(cursor.getColumnIndex(CARD_TIME))
-                additionalInfo = cursor.getString(cursor.getColumnIndex(ADDITIONAL_INFO))
+                val idColumnIndex = cursor.getColumnIndex(PRIMARY_KEY)
+                val imgPathColumnIndex = cursor.getColumnIndex(CARD_IMAGE_PATH)
+                val titleColumnIndex = cursor.getColumnIndex(CARD_TITLE)
+                val continentColumnIndex = cursor.getColumnIndex(CARD_CONTINENT)
+                val countryColumnIndex = cursor.getColumnIndex(CARD_COUNTRY)
+                val dateColumnIndex = cursor.getColumnIndex(CARD_DATE)
+                val timeColumnIndex = cursor.getColumnIndex(CARD_TIME)
+                val additionalInfoColumnIndex = cursor.getColumnIndex(ADDITIONAL_INFO)
 
-                val record = RecordModel(id = id, imgPath = imgPath, title = title, continent = continent, country = country, date = date, time = time, additionalInfo = additionalInfo)
-                recordList.add(record)
+                if (idColumnIndex != -1 && imgPathColumnIndex != -1 && titleColumnIndex != -1 &&
+                    continentColumnIndex != -1 && countryColumnIndex != -1 && dateColumnIndex != -1 &&
+                    timeColumnIndex != -1 && additionalInfoColumnIndex != -1) {
+
+                    id = cursor.getInt(idColumnIndex)
+                    imgPath = cursor.getString(imgPathColumnIndex)
+                    title = cursor.getString(titleColumnIndex)
+                    continent = cursor.getString(continentColumnIndex)
+                    country = cursor.getString(countryColumnIndex)
+                    date = cursor.getString(dateColumnIndex)
+                    time = cursor.getString(timeColumnIndex)
+                    additionalInfo = cursor.getString(additionalInfoColumnIndex)
+
+                    val record = RecordModel(
+                        id = id,
+                        imgPath = imgPath,
+                        title = title,
+                        continent = continent,
+                        country = country,
+                        date = date,
+                        time = time,
+                        additionalInfo = additionalInfo
+                    )
+                    recordList.add(record)
+                }
             } while(cursor.moveToNext())
         }
         return recordList
