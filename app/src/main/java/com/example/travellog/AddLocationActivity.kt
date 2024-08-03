@@ -30,6 +30,7 @@ class AddLocationActivity : UserInputActivity(), View.OnClickListener {
         addBtn.setOnClickListener(this)
         dateField.setOnClickListener(this)
         timeField.setOnClickListener(this)
+        imagePath = null.toString()
 
     }
 

@@ -66,13 +66,10 @@ abstract class UserInputActivity : ComponentActivity() {
             val currentTime = Calendar.getInstance()
             selectedTime.set(Calendar.HOUR_OF_DAY, hourOfDay)
             selectedTime.set(Calendar.MINUTE, minute)
-            if (selectedTime.timeInMillis > currentTime.timeInMillis) {
-                Toast.makeText(this, "Selected time cannot be in the future", Toast.LENGTH_SHORT).show()
-            } else {
-                val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
-                val formattedTime = timeFormat.format(selectedTime.time)
-                timeField.text = formattedTime
-            }
+
+            val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+            val formattedTime = timeFormat.format(selectedTime.time)
+            timeField.text = formattedTime
         },
             calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false
         )
